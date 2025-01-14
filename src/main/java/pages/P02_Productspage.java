@@ -4,6 +4,7 @@ import Utils.DataGenerator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import java.util.List;
 import java.util.Random;
 
@@ -14,32 +15,20 @@ public class P02_Productspage extends Page_Base {
         super(driver);
     }
 
-    // Define the "Add to Cart" button locator
     private final By ADD_TO_CART_BUTTON = By.xpath("//button[text()='ADD TO CART']");
     private final By REMOVE_FROM_CART_BUTTON = By.xpath("//button[text()='REMOVE']");
-
-
     private final By ITEM_PRICE = By.xpath("//div[@class=\"inventory_item_price\"] ");
     private final By SHOPPING_CART_ICON = By.id("shopping_cart_container");
-
+    private double totalPrices = 0;
 
     public double getTotalPrices() {
         return totalPrices;
     }
 
-    private double totalPrices = 0;
-
-
-
-    public P02_Productspage clickOnShoppingCarticon(){
+    public P02_Productspage clickOnShoppingCarticon() {
         driver.findElement(SHOPPING_CART_ICON).click();
         return this;
     }
-
-//    public P02_Productspage clickOnRemoveButton(){
-//        driver.findElement(REMOVE_FROM_CART_BUTTON).click();
-//        return this;
-//    }
 
     // Method to click on random "Add to Cart" buttons dynamically based on available products
 
@@ -59,11 +48,11 @@ public class P02_Productspage extends Page_Base {
         for (int i = 0; i < itemsToAdd; i++) {
             int randomIndex = DataGenerator.getRandomIndex();  // Get a unique random index
             addToCartButtons.get(randomIndex).click();  // Click the "Add to Cart" button at that index
-         String price =   itemsPricesList.get(randomIndex).getText().split("\\$")[1];  // Click the "Add to Cart" button at that index
+            String price = itemsPricesList.get(randomIndex).getText().split("\\$")[1];  // Click the "Add to Cart" button at that index
             double covertedPrice = Double.parseDouble(price);  // Convert to double for precision
 
-            System.out.println("price for item number"+ i + "  = " + price );
-            totalPrices+= covertedPrice;
+            System.out.println("price for item number" + i + "  = " + price);
+            totalPrices += covertedPrice;
             System.out.println("Clicked on button at index: " + randomIndex);
         }
         System.out.println("total after sum ==> " + totalPrices);
@@ -71,6 +60,7 @@ public class P02_Productspage extends Page_Base {
         return this;
     }
 
+    // Method to click on random "Remove" buttons dynamically based on added on the cart
     public P02_Productspage removeRandomItemFromCart() {
         // Find all "Remove" buttons
         List<WebElement> removeButtons = driver.findElements(REMOVE_FROM_CART_BUTTON);
@@ -100,5 +90,4 @@ public class P02_Productspage extends Page_Base {
 
         return this;
     }
-
 }

@@ -17,7 +17,7 @@ public class TC01_Login extends testBase {
                 .clickOnLoginButton();
 
         // Add an assertion to verify successful login
-        String expectedUrl = "https://www.saucedemo.com/v1/inventory.html"; // Replace with the URL after successful login
+        String expectedUrl = "https://www.saucedemo.com/v1/inventory.html";
         Assert.assertEquals(getDriver().getCurrentUrl(), expectedUrl, "Login was not successful.");
     }
 }

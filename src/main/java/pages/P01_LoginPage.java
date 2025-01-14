@@ -17,21 +17,18 @@ public class P01_LoginPage extends Page_Base {
 
 
     //define action methods
-    public P01_LoginPage enterUsername(String userName){
+    public P01_LoginPage enterUsername(String userName) {
         driver.findElement(USERNAME_TEXT).sendKeys(userName);
         return this;
     }
 
-    public P01_LoginPage enterPassword(String password){
+    public P01_LoginPage enterPassword(String password) {
         driver.findElement(PASSWORD_TEXT).sendKeys(password);
         return this;
     }
-    public P01_LoginPage clickOnLoginButton(){
+
+    public P01_LoginPage clickOnLoginButton() {
         driver.findElement(LOGIN_BUTTON).click();
         return this;
     }
-
-
-
-
 }

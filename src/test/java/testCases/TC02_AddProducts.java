@@ -18,7 +18,6 @@ public class TC02_AddProducts extends testBase {
                 enterPassword("secret_sauce").
                 clickOnLoginButton();
         Assert.assertTrue(getDriver().getPageSource().contains("Products"), "Page source does not contain the expected text.");
-
     }
 
 
@@ -28,9 +27,9 @@ public class TC02_AddProducts extends testBase {
         String lastName = DataGenerator.generateLastName();
 
         double ecpectedSumPrices = new P02_Productspage(getDriver()).getTotalPrices();
-        double actualtotalPriceText = new P04_CheckoutPage(getDriver()).getCovertedPrice();
-        double totalTaxText = new P04_CheckoutPage(getDriver()).getCovertedTax();
-        double actualFinalTotal = new P04_CheckoutPage(getDriver()).getCovertedFinalPrice();
+        double actualtotalPriceText = new P04_CheckoutPage(getDriver()).getConvertedPrice();
+        double totalTaxText = new P04_CheckoutPage(getDriver()).getConvertedTax();
+        double actualFinalTotal = new P04_CheckoutPage(getDriver()).getConvertedFinalPrice();
         double TotalPriceAndTotalTax = actualtotalPriceText + totalTaxText;
 
         new P01_LoginPage(getDriver()).
@@ -49,9 +48,9 @@ public class TC02_AddProducts extends testBase {
                 enterFirstName(firstName).
                 enterLastName(lastName).
                 enterZipCode("12345").
-                clickContinue().
-                getItemsAndTaxAndFinalPrice().
-                clickOnFinishButton();
+                clickContinueButton().
+                fetchAndParsePrices().
+                clickFinishButton();
 
         Assert.assertEquals(actualtotalPriceText, ecpectedSumPrices);
         Assert.assertEquals(TotalPriceAndTotalTax, actualFinalTotal);
@@ -59,59 +58,58 @@ public class TC02_AddProducts extends testBase {
     }
 
 
+    @Test(priority = 3, description = "Add random items to carts")
+    public void addItemsToCartRemoveOneAndProceed() throws InterruptedException {
+        String firstName = DataGenerator.generateFirstName();
+        String lastName = DataGenerator.generateLastName();
 
-@Test(priority = 3, description = "Add random items to carts")
-public void addItemsToCartRemoveOneAndProceed() throws InterruptedException {
-    String firstName = DataGenerator.generateFirstName();
-    String lastName = DataGenerator.generateLastName();
+        new P01_LoginPage(getDriver()).
+                enterUsername("standard_user").
+                enterPassword("secret_sauce").
+                clickOnLoginButton();
+        Thread.sleep(2000);
 
-    new P01_LoginPage(getDriver()).
-            enterUsername("standard_user").
-            enterPassword("secret_sauce").
-            clickOnLoginButton();
-    Thread.sleep(2000);
+        // Go to the products page and add random items to the cart
+        new P02_Productspage(getDriver()).
+                addRandomItemsToCarts().
+                clickOnShoppingCarticon();  // Dynamically adds a random number of items to the cart
+        Thread.sleep(2000);
 
-    // Go to the products page and add random items to the cart
-    new P02_Productspage(getDriver()).
-            addRandomItemsToCarts().
-            clickOnShoppingCarticon();  // Dynamically adds a random number of items to the cart
-    Thread.sleep(2000);
+        new P03_CartPage(getDriver()).
+                clickOnCheckoutButton();
+        new P04_CheckoutPage(getDriver()).
+                enterFirstName(firstName).
+                enterLastName(lastName).
+                enterZipCode("12345").
+                clickContinueButton().
+                clickCancelButton();
+        Thread.sleep(2000);
 
-    new P03_CartPage(getDriver()).
-            clickOnCheckoutButton();
-    new P04_CheckoutPage(getDriver()).
-            enterFirstName(firstName).
-            enterLastName(lastName).
-            enterZipCode("12345").
-            clickContinue().
-            clickOnCancelhButton();
-    Thread.sleep(2000);
+        new P02_Productspage(getDriver()).removeRandomItemFromCart()
+                .clickOnShoppingCarticon();
+        Thread.sleep(2000);
 
-    new P02_Productspage(getDriver()).removeRandomItemFromCart()
-            .clickOnShoppingCarticon();
-    Thread.sleep(2000);
+        new P03_CartPage(getDriver()).
+                clickOnCheckoutButton();
+        new P04_CheckoutPage(getDriver()).
+                enterFirstName(firstName).
+                enterLastName(lastName).
+                enterZipCode("12345").
+                clickContinueButton().
+                fetchAndParsePrices().
+                clickFinishButton();
+        Thread.sleep(2000);
 
-    new P03_CartPage(getDriver()).
-            clickOnCheckoutButton();
-    new P04_CheckoutPage(getDriver()).
-            enterFirstName(firstName).
-            enterLastName(lastName).
-            enterZipCode("12345").
-            clickContinue().
-            getItemsAndTaxAndFinalPrice().
-            clickOnFinishButton();
-    Thread.sleep(2000);
+        double ecpectedSumPrices = new P02_Productspage(getDriver()).getTotalPrices();
+        double actualtotalPriceText = new P04_CheckoutPage(getDriver()).getConvertedPrice();
+        double totalTaxText = new P04_CheckoutPage(getDriver()).getConvertedTax();
+        double actualFinalTotal = new P04_CheckoutPage(getDriver()).getConvertedFinalPrice();
+        double TotalPriceAndTotalTax = actualtotalPriceText + totalTaxText;
+        Thread.sleep(2000);
 
-    double ecpectedSumPrices = new P02_Productspage(getDriver()).getTotalPrices();
-    double actualtotalPriceText = new P04_CheckoutPage(getDriver()).getCovertedPrice();
-    double totalTaxText = new P04_CheckoutPage(getDriver()).getCovertedTax();
-    double actualFinalTotal = new P04_CheckoutPage(getDriver()).getCovertedFinalPrice();
-    double TotalPriceAndTotalTax = actualtotalPriceText + totalTaxText;
-    Thread.sleep(2000);
+        Assert.assertEquals(actualtotalPriceText, ecpectedSumPrices);
+        Assert.assertEquals(TotalPriceAndTotalTax, actualFinalTotal);
+        Assert.assertTrue(getDriver().getPageSource().contains("THANK YOU FOR YOUR ORDER"), "Page source does not contain the expected text.");
 
-    Assert.assertEquals(actualtotalPriceText, ecpectedSumPrices);
-    Assert.assertEquals(TotalPriceAndTotalTax, actualFinalTotal);
-    Assert.assertTrue(getDriver().getPageSource().contains("THANK YOU FOR YOUR ORDER"), "Page source does not contain the expected text.");
-
-}
+    }
 }
