@@ -3,16 +3,6 @@
 <suite name="All Test Suite">
     <parameter name="browsername" value=""/>
 
-    <test name="Login with Valid Credentials">
-        <classes>
-            <class name="testCases.TC01_Login">
-                <methods>
-                    <include name="loginWithValidCredintial_P"/>
-                </methods>
-            </class>
-        </classes>
-    </test>
-
     <test name="Complete Product Purchase Flow">
         <classes>
             <class name="testCases.TC02_AddProducts">

@@ -1,12 +1,14 @@
 package pages;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
+import org.openqa.selenium.io.FileHandler;
 
+import java.io.File;
 import java.io.IOException;
 
 public class Page_Base {
     WebDriver driver;
+
     public Page_Base(WebDriver driver) {
         this.driver = driver;
     }
@@ -27,6 +29,18 @@ public class Page_Base {
                 Runtime.getRuntime().exec("pkill -f chromedriver");
                 Runtime.getRuntime().exec("pkill -f chrome");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void captureScreenshot(WebDriver driver, String screenshotName) {
+        TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
+        try {
+            FileHandler.copy(takesScreenshot.getScreenshotAs(OutputType.FILE), new File(System.getProperty("user.dir")
+                    + "/src/test/resources/Screenshots/" + screenshotName + System.currentTimeMillis() + ".png"));
+        } catch (WebDriverException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -79,17 +79,9 @@ public class P04_CheckoutPage extends Page_Base {
         String totalTaxText = driver.findElement(TAX_TOTAL).getText().split(CURRENCY_DELIMITER)[1];
         String totalFinalPriceText = driver.findElement(FINAL_PRICE).getText().split(CURRENCY_DELIMITER)[1];
 
-        System.out.println("Text - Total Price: " + totalPriceText);
-        System.out.println("Text - Total Tax: " + totalTaxText);
-        System.out.println("Text - Final Price: " + totalFinalPriceText);
-
         convertedPrice = Double.parseDouble(totalPriceText);
         convertedTax = Double.parseDouble(totalTaxText);
         convertedFinalPrice = Double.parseDouble(totalFinalPriceText);
-
-        System.out.println("Parsed - Total Price: " + convertedPrice);
-        System.out.println("Parsed - Total Tax: " + convertedTax);
-        System.out.println("Parsed - Final Price: " + convertedFinalPrice);
 
         return this;
     }
