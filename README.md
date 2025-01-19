@@ -24,7 +24,7 @@
 
 ### Local Testing Execution Example
 
-![Local Testing Execution Example](sequential_execution.gif)
+![Local Testing Execution Example](execution.gif)
 
 ---
 
